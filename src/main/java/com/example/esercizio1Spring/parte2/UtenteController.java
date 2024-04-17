@@ -18,7 +18,7 @@ public class UtenteController {
         try{
             utenteService.registraUtente(utente);
             return ResponseEntity.ok(utente);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | EmailNotValidException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
@@ -35,6 +35,11 @@ public class UtenteController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleRegisterException(IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmailNotValidException.class)
+    public ResponseEntity<String> handleEmailException(EmailNotValidException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
